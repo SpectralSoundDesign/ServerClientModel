@@ -15,7 +15,7 @@ def upload_csv():
         return jsonify({'error': 'File not selected'}), 400
     
     if f and f.filename.split('.')[-1] == 'csv':
-        f.save(f'./uploads/{f.filename}')
+        f.save(f'uploads/{f.filename}')
         return jsonify({'success': 'File successfully uploaded'}), 200
     else:
         return jsonify({'error': 'Invalid file type. You can only upload csv files.'}), 400
