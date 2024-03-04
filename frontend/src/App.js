@@ -1,33 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './App.css';
 
 function App() {
-  const [message, setMessage] = useState('');
-
-  useEffect(() => {
-    fetch('http://localhost:5000/api')
-      .then(response => {
-        const contentType = response.headers.get("content-type");
-        if (contentType && contentType.indexOf("application/json") !== -1) {
-          return response.json();
-        } else {
-          throw new Error('Server is not returning JSON');
-        }
-      })
-      .then(data => {
-        console.log(data);
-        setMessage(data.message);
-      })
-      .catch(error => console.error('Error fetching data:', error));
-  }, []);
-  
+  const handleCsvUpload = (event) => {
+    const f = event.target.files[0];
+    const formData = new FormData();
+    formData.append('file', f);
+    fetch('http://localhost:5000/upload', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error(error))
+  }
 
   return (
     <div className="App">
       <header className="App-header">
-        <p>
-          Message from Flask backend: {message}
-        </p>
+        <input type="file" onChange={handleCsvUpload} />
       </header>
     </div>
   );
